@@ -5,6 +5,11 @@
       AWS CodePipeline for build and deployment
 ========================================================*/
 
+# module "codestar_connection" {
+#   source          = "./CodeStar" 
+#   connection_name = "my-github-connection"
+# }
+
 resource "aws_codepipeline" "aws_codepipeline" {
   name     = var.name
   role_arn = var.pipe_role
@@ -34,6 +39,26 @@ resource "aws_codepipeline" "aws_codepipeline" {
       }
     }
   }
+
+  # stage {
+  #   name = "Source"
+
+  #   action {
+  #     name             = "Source"
+  #     category         = "Source"
+  #     owner            = "AWS"
+  #     provider         = "CodeStarSourceConnection"
+  #     version          = "1"
+  #     output_artifacts = ["SourceArtifact"]
+
+  #     configuration = {
+  #       ConnectionArn = module.codestar_connection.codestar_connection_arn
+  #       FullRepositoryId = "${var.repo_owner}/${var.repo_name}"
+  #       BranchName     = var.branch
+  #       DetectChanges  = true
+  #     }
+  #   }
+  # }
 
   stage {
     name = "Build"
